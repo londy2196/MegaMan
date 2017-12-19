@@ -75,5 +75,6 @@ public abstract class LevelState extends JPanel {
 	public abstract void moveMegaManRight();
 	public abstract void speedUpMegaMan();
 	public abstract void slowDownMegaMan();
+
 	
 }
