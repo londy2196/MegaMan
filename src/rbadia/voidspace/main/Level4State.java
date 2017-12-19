@@ -6,16 +6,16 @@ import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
-public class Level3State extends Level1State{
-	
+public class Level4State extends Level1State{
+
 	private static final long serialVersionUID = 1L;
 	
-	public Level3State(int level, MainFrame frame, GameStatus status, 
+	public Level4State(int level, MainFrame frame, GameStatus status, 
 			LevelLogic gameLogic, InputHandler inputHandler, 
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
 	}
-
+	
 	@Override
 	public void doStart() {	
 		super.doStart();
@@ -36,6 +36,7 @@ public class Level3State extends Level1State{
 
 				asteroid.setLocation(this.getWidth() - asteroid.getPixelsWide(),
 						rand.nextInt(this.getHeight() - asteroid.getPixelsTall() - 32));
+
 			}
 			else {
 				// draw explosion
@@ -59,7 +60,4 @@ public class Level3State extends Level1State{
 		}
 		return platforms;
 	}
-
-	
 }
-
