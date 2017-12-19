@@ -10,8 +10,6 @@ public class Level3State extends Level1State{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int A = NEW_ASTEROID_DELAY + 200;
-	
 	public Level3State(int level, MainFrame frame, GameStatus status, 
 			LevelLogic gameLogic, InputHandler inputHandler, 
 			GraphicsManager graphicsMan, SoundManager soundMan) {
@@ -34,7 +32,7 @@ public class Level3State extends Level1State{
 		}
 		else {
 			long currentTime = System.currentTimeMillis();
-			if((currentTime - lastAsteroidTime) > A){
+			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY + 200){
 
 				asteroid.setLocation(this.getWidth() - asteroid.getPixelsWide(),
 						rand.nextInt(this.getHeight() - asteroid.getPixelsTall() - 32));
