@@ -26,6 +26,7 @@ public class MegaManMain {
 	public static AudioInputStream audioStream;
 	public static Clip audioClip;
 	public static File audioFile;	
+	// public static int level = 0;
 
 	/**
 	 * @param args

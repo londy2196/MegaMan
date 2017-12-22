@@ -139,6 +139,7 @@ public class InputHandler implements KeyListener{
 			break;
 		case KeyEvent.VK_N:
 			this.nIsPressed = true;
+			getLevelState().setLevel(this.getLevelState().getLevel() + 1);
 			break;
 		}
 		e.consume();
@@ -193,5 +194,6 @@ public class InputHandler implements KeyListener{
 	public boolean getSpace(){
 		return spaceIsPressed;
 	}
+	
 
 }

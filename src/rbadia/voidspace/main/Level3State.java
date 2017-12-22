@@ -3,10 +3,13 @@ package rbadia.voidspace.main;
 import java.awt.Graphics2D;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.model.Asteroid;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
 public class Level3State extends Level1State{
+	
+	protected Asteroid asteroid2;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -15,12 +18,23 @@ public class Level3State extends Level1State{
 			GraphicsManager graphicsMan, SoundManager soundMan) {
 		super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
 	}
-
+	
+	public Asteroid getAsteroid2() { return asteroid2; }
+	
 	@Override
-	public void doStart() {	
+	public void doStart() {
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
+		GameStatus status = this.getGameStatus();
+		status.setNewAsteroid2(false);
+		newAsteroid2(this);
+	}
+	
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		drawAsteroid2();
 	}
 
 	@Override
@@ -43,6 +57,32 @@ public class Level3State extends Level1State{
 			}
 		}	
 	}
+	
+	protected void drawAsteroid2() {
+		Graphics2D g2d = getGraphics2D();
+		if(asteroid2.getX() + asteroid2.getPixelsWide() < 500) {
+			asteroid2.translate(asteroid2.getSpeed() + 2, asteroid2.getSpeed() + 2);
+			getGraphicsManager().drawAsteroid(asteroid2,  g2d, this);
+		}
+		else {
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY + 200) {
+				asteroid2.setLocation(0, 
+						rand.nextInt(this.getHeight() - asteroid2.getPixelsTall() - 32));
+			}
+			else {
+				getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+			}
+		}
+	}
+	
+	public Asteroid newAsteroid2(Level3State screen){
+		int xPos = (int) (Asteroid.WIDTH);
+		int yPos = rand.nextInt((int)(screen.getHeight() - Asteroid.HEIGHT- 32));
+		asteroid2 = new Asteroid(xPos, yPos);
+		return asteroid2;
+	}
+	
 	
 	@Override
 	public Platform[] newPlatforms(int n){

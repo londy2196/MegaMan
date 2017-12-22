@@ -26,6 +26,7 @@ public class Level2State extends Level1State {
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
+		
 	}
 
 	@Override

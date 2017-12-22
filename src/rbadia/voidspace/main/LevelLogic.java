@@ -437,9 +437,6 @@ public class LevelLogic {
 		if(ih.isRightPressed()){
 			getLevelState().moveMegaManRight();
 		}
-		if(ih.isNPressed()) {
-			stateTransition(ih, levelState);
-		}
 	}
 
 	public static void delay(long millis) {
