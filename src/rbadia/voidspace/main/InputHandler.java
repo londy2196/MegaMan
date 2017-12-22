@@ -2,6 +2,9 @@ package rbadia.voidspace.main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
 
 /**
  * Handles user input events.
@@ -20,8 +23,14 @@ public class InputHandler implements KeyListener{
 	private boolean iIsPressed;
 	private boolean nIsPressed;
 
+	
+	private int tmp = 0;
+	
 	private LevelState levelState;
 	//private GameScreen gScreen;
+	
+	private GameStatus status;
+
 
 	public LevelState getLevelState() { return levelState; }
 	public void setLevelState(LevelState levelState) { this.levelState = levelState; }
@@ -130,6 +139,12 @@ public class InputHandler implements KeyListener{
 			break;
 		case KeyEvent.VK_M:
 			this.mIsPressed= true;
+			if (isMPressed() && tmp == 0) {
+				MegaManMain.audioClip.stop();
+			} else if (tmp == 1) {
+				MegaManMain.audioClip.start();
+				tmp = 0;
+			}
 			break;
 		case KeyEvent.VK_S:
 			this.sIsPressed = true;
@@ -139,7 +154,9 @@ public class InputHandler implements KeyListener{
 			break;
 		case KeyEvent.VK_N:
 			this.nIsPressed = true;
-			getLevelState().setLevel(this.getLevelState().getLevel() + 1);
+			if (isNPressed()) {
+				
+			}
 			break;
 		}
 		e.consume();
@@ -177,12 +194,14 @@ public class InputHandler implements KeyListener{
 			break;
 		case KeyEvent.VK_M:
 			this.mIsPressed = false;
+			tmp = 1;
 			break;
 		case KeyEvent.VK_S:
 			this.sIsPressed = false;
 			break;
 		case KeyEvent.VK_N:
 			this.nIsPressed = false;
+			break;
 		}
 		e.consume();
 	}

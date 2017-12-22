@@ -59,20 +59,25 @@ public class MegaManMain {
 			LevelState level1State = new Level1State(1, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level2State = new Level2State(2, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level3State = new Level3State(3, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
-			LevelState level4State = new Level4State(4, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
-			LevelState levels[] = { level1State, level2State, level3State, level4State };
+			LevelState levels[] = { level1State, level2State, level3State };
 
 			String outcome = "CONGRATS!! YOU WON!!";
 			for (LevelState nextLevel : levels) {
-
+				
 				System.out.println("Next Level Started");
 				frame.setLevelState(nextLevel);
 				gameLogic.setLevelState(nextLevel);
 				inputHandler.setLevelState(nextLevel);
 				gameStatus.setLevel(nextLevel.getLevel());
-				
 				frame.setVisible(true);  // TODO verify whether this is necessary
 				startInitialMusic();
+				
+				if (inputHandler.isNPressed()) {
+					frame.setLevelState(nextLevel);
+					gameLogic.setLevelState(nextLevel);
+					inputHandler.setLevelState(nextLevel);
+					gameStatus.setLevel(nextLevel.getLevel());
+				}
 
 				// init main game loop
 				Thread nextLevelLoop = new Thread(new LevelLoop(nextLevel));

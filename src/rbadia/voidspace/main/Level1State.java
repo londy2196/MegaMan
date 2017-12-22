@@ -115,7 +115,7 @@ public class Level1State extends LevelState {
 		newPlatforms(getNumPlatforms());
 		newAsteroid(this);
 
-		lastAsteroidTime = -NEW_ASTEROID_DELAY;
+		lastAsteroidTime= -NEW_ASTEROID_DELAY;
 		lastLifeTime = -NEW_MEGAMAN_DELAY;
 
 		bigFont = originalFont;
