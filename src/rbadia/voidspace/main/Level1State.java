@@ -18,6 +18,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.graphics.GraphicsManagerPlus;
 import rbadia.voidspace.model.Asteroid;
 import rbadia.voidspace.model.BigBullet;
 import rbadia.voidspace.model.Bullet;
@@ -78,7 +79,7 @@ public class Level1State extends LevelState {
 		this.setGraphics2D(backBuffer.createGraphics());
 		rand = new Random();
 	}
-
+	
 	// Getters
 	public MegaMan getMegaMan() 					{ return megaMan; 		}
 	public Floor[] getFloor()					{ return floor; 			}
@@ -543,7 +544,6 @@ public class Level1State extends LevelState {
 			this.platforms[i] = new Platform(0 , getHeight()/2 + 140 - i*40);
 		}
 		return platforms;
-
 	}
 
 	/**

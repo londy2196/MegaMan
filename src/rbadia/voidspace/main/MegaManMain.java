@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.graphics.GraphicsManagerPlus;
 import rbadia.voidspace.sounds.SoundManager;
 
 /**
@@ -36,9 +37,11 @@ public class MegaManMain {
 
 		MainFrame frame = new MainFrame();              		// Main Game Window
 		GameStatus gameStatus = new GameStatus();       		// Records overall status of game across all levels
+		GameStatusPlus statusPlus = new GameStatusPlus(); // Extension of GameStatus for new objects
 		LevelLogic gameLogic = new LevelLogic();        		// Coordinates among various levels
 		InputHandler inputHandler = new InputHandler(); 		// Keyboard listener
 		GraphicsManager graphicsMan = new GraphicsManager(); // Draws all graphics for game objects
+		GraphicsManagerPlus graphicsPlus = new GraphicsManagerPlus(); // Extension of graphics manager for new game objects 
 		SoundManager soundMan = new SoundManager();			// Loads and plays all sounds during the game
 
 		audioFile = new File("audio/menuScreen.wav");
@@ -58,7 +61,7 @@ public class MegaManMain {
 
 			LevelState level1State = new Level1State(1, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level2State = new Level2State(2, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
-			LevelState level3State = new Level3State(3, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
+			LevelState level3State = new Level3State(3, frame, statusPlus, gameLogic, inputHandler, graphicsPlus, soundMan);
 			LevelState levels[] = { level1State, level2State, level3State };
 
 			String outcome = "CONGRATS!! YOU WON!!";
@@ -71,13 +74,6 @@ public class MegaManMain {
 				gameStatus.setLevel(nextLevel.getLevel());
 				frame.setVisible(true);  // TODO verify whether this is necessary
 				startInitialMusic();
-				
-				if (inputHandler.isNPressed()) {
-					frame.setLevelState(nextLevel);
-					gameLogic.setLevelState(nextLevel);
-					inputHandler.setLevelState(nextLevel);
-					gameStatus.setLevel(nextLevel.getLevel());
-				}
 
 				// init main game loop
 				Thread nextLevelLoop = new Thread(new LevelLoop(nextLevel));

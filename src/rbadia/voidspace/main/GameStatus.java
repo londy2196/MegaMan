@@ -107,7 +107,7 @@ public class GameStatus {
 	 * @return the number of asteroid destroyed
 	 */
 	public synchronized long getAsteroidsDestroyed() {
-		return asteroidsDestroyed;
+   		return asteroidsDestroyed;
 	}
 
 	public synchronized void setAsteroidsDestroyed(long asteroidsDestroyed) {
@@ -119,12 +119,12 @@ public class GameStatus {
 	 * @return the number lifes left
 	 */
 	public synchronized int getLivesLeft() {
-		return livesLeft;
+  		return livesLeft;
 	}
 
 	public synchronized void setLivesLeft(int livesLeft) {
-		this.livesLeft = livesLeft;
-	}
+  		this.livesLeft = livesLeft;
+	} 
 
 	public int getLevel() {
 		return level;

@@ -1,5 +1,6 @@
 package rbadia.voidspace.graphics;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,7 @@ import java.awt.image.ImageObserver;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import rbadia.voidspace.model.BigAsteroid;
 import rbadia.voidspace.model.Moltres;
 import rbadia.voidspace.model.Ship;
 
@@ -17,6 +19,8 @@ public class GraphicsManagerPlus extends GraphicsManager {
 	private BufferedImage shipExplosionImg;
 	private BufferedImage moltresImg;
 	private BufferedImage moltresDefeatedImg;
+	private BufferedImage bigAsteroidImg;
+	private BufferedImage bigAsteroidExplosionImg;
 	
 	public GraphicsManagerPlus(){
 		
@@ -25,6 +29,8 @@ public class GraphicsManagerPlus extends GraphicsManager {
 			this.shipExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/shipExplosion.png"));
 			this.moltresImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/moltres.png"));
 			this.moltresDefeatedImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/moltresDefeated.png"));
+			this.bigAsteroidImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/BigAsteroid.png"));
+			this.bigAsteroidExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigAsteroidExplosion.png"));
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -45,5 +51,10 @@ public class GraphicsManagerPlus extends GraphicsManager {
 	public void drawMoltresExplosion(Rectangle moltresDefeated, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(moltresDefeatedImg, moltresDefeated.x, moltresDefeated.y, observer);
 	}
-
+	public void drawBigAsteroid(BigAsteroid bigAsteroid, Graphics g2d, ImageObserver observer) {
+		g2d.drawImage(bigAsteroidImg, bigAsteroid.x, bigAsteroid.y,observer);
+	}
+	public void drawBigAsteroidExplosion(Rectangle bigAsteroidExplosion, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(bigAsteroidExplosionImg, bigAsteroidExplosion.x, bigAsteroidExplosion.y, observer);
+	}
 }
