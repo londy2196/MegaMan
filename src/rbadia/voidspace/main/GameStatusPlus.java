@@ -5,6 +5,7 @@ public class GameStatusPlus extends GameStatus {
 	private boolean newShip;
 	private long shipDestroyed = 0;
 	private long bigAsteroidsDestroyed = 0;
+	private int livesLeft;
 	
 	public GameStatusPlus() {
 	}
@@ -32,4 +33,12 @@ public class GameStatusPlus extends GameStatus {
 	public synchronized void setBigAsteroidsDestroyed(long bigAsteroidsDestroyed) {
 		this.bigAsteroidsDestroyed = bigAsteroidsDestroyed;
 	}
+	public synchronized int getLivesLeft() {
+  		return livesLeft;
+	}
+	public synchronized void setLivesLeft(int livesLeft) {
+  		this.livesLeft = livesLeft;
+	} 
+
+	
 }

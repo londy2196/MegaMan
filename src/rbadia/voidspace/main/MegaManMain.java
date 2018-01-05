@@ -55,18 +55,16 @@ public class MegaManMain {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameStatus.setAsteroidsDestroyed(0);
 		gameStatus.setLivesLeft(3);
-
 		int playAgain = 2;
 		while(playAgain != 1) {
 
-			LevelState level1State = new Level1State(1, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
+			LevelState level1State = new LevelExtension(1, frame, statusPlus, gameLogic, inputHandler, graphicsPlus, soundMan);
 			LevelState level2State = new Level2State(2, frame, gameStatus, gameLogic, inputHandler, graphicsMan, soundMan);
 			LevelState level3State = new Level3State(3, frame, statusPlus, gameLogic, inputHandler, graphicsPlus, soundMan);
 			LevelState levels[] = { level1State, level2State, level3State };
 
 			String outcome = "CONGRATS!! YOU WON!!";
 			for (LevelState nextLevel : levels) {
-				
 				System.out.println("Next Level Started");
 				frame.setLevelState(nextLevel);
 				gameLogic.setLevelState(nextLevel);
@@ -79,7 +77,6 @@ public class MegaManMain {
 				Thread nextLevelLoop = new Thread(new LevelLoop(nextLevel));
 				nextLevelLoop.start();
 				nextLevelLoop.join();
-
 				if (nextLevel.getGameStatus().isGameOver()) {
 					outcome = "SORRY YOU LOST";
 					break;

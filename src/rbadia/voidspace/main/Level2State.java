@@ -1,5 +1,10 @@
 package rbadia.voidspace.main;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import rbadia.voidspace.graphics.GraphicsManager;
 import rbadia.voidspace.model.Platform;
@@ -11,6 +16,8 @@ import rbadia.voidspace.sounds.SoundManager;
  * Asteroids travel at 225 degree angle
  */
 public class Level2State extends Level1State {
+	
+	private BufferedImage background;
 
 	private static final long serialVersionUID = -2094575762243216079L;
 
@@ -26,10 +33,9 @@ public class Level2State extends Level1State {
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
-		
 	}
 
-	@Override
+	@Override 
 	protected void drawAsteroid() {
 		Graphics2D g2d = getGraphics2D();
 		if((asteroid.getX() + asteroid.getPixelsWide() >  0)) {
@@ -64,5 +70,19 @@ public class Level2State extends Level1State {
 			}
 		}
 		return platforms;
+	}
+	
+	protected void clearScreen() {
+		// clear screen
+		Graphics2D g2d = getGraphics2D();
+		g2d.setPaint(Color.BLACK);
+		g2d.fillRect(0, 0, getSize().width, getSize().height);
+		try {
+			this.background = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/background.png"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		g2d.drawImage(background, 0, 0, null);
 	}
 }

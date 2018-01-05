@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import rbadia.voidspace.model.BigAsteroid;
+import rbadia.voidspace.model.MegaMan;
 import rbadia.voidspace.model.Moltres;
 import rbadia.voidspace.model.Ship;
 
@@ -21,6 +22,9 @@ public class GraphicsManagerPlus extends GraphicsManager {
 	private BufferedImage moltresDefeatedImg;
 	private BufferedImage bigAsteroidImg;
 	private BufferedImage bigAsteroidExplosionImg;
+	private BufferedImage megaManLeftImg;
+	private BufferedImage megaFallLImg;
+	private BufferedImage megaFireLImg;
 	
 	public GraphicsManagerPlus(){
 		
@@ -31,13 +35,25 @@ public class GraphicsManagerPlus extends GraphicsManager {
 			this.moltresDefeatedImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/moltresDefeated.png"));
 			this.bigAsteroidImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/BigAsteroid.png"));
 			this.bigAsteroidExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigAsteroidExplosion.png"));
-
+			this.megaManLeftImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/left.png"));
+			this.megaFallLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/leftjump.png"));
+			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/leftshoot.png"));
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
 					"VoidSpace - Fatal Error", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			System.exit(-1);
 		}
+	}
+	public void drawMegaManL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(megaManLeftImg, megaMan.x, megaMan.y, observer);
+	}
+	public void drawMegaFallL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(megaFallLImg, megaMan.x, megaMan.y, observer);
+	}
+	public void drawMegaFireL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(megaFireLImg, megaMan.x, megaMan.y, observer);
 	}
 	public void drawShip(Ship ship, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(shipImg, ship.x, ship.y, observer);

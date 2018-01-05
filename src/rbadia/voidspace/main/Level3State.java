@@ -1,7 +1,9 @@
 package rbadia.voidspace.main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.List;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,9 +20,7 @@ import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.model.Ship;
 import rbadia.voidspace.sounds.SoundManager;
 
-public class Level3State extends Level1State{
-	
-	private BufferedImage background;
+public class Level3State extends LevelExtension{
 	
 	private GraphicsManagerPlus graphicsPlus;
 	private GameStatusPlus statusPlus;
@@ -34,6 +34,7 @@ public class Level3State extends Level1State{
 	protected long lastAsteroidTime2;
 	protected long lastShipTime;
 	protected long lastBigAsteroidTime;
+	protected long lastShipBulletTime;
 	
 	protected static final int NEW_SHIP_DELAY = 500;
 	protected static final int NEW_ASTEROID2_DELAY = 500;
@@ -45,8 +46,9 @@ public class Level3State extends Level1State{
 	protected int levelBigAsteroidsDestroyed = 0;
 	
 	public GraphicsManagerPlus getGraphicsManagerPlus() { return graphicsPlus; }
-	protected void setGraphicsManagerPlus(GraphicsManagerPlus graphicsPlus) { this.graphicsPlus = graphicsPlus; }
 	public GameStatusPlus getGameStatusPlus() { return statusPlus; }
+	
+	protected void setGraphicsManagerPlus(GraphicsManagerPlus graphicsPlus) { this.graphicsPlus = graphicsPlus; }
 	public void setGameStatusPlus(GameStatusPlus statusPlus) { this.statusPlus = statusPlus; }
 	
 	public Level3State(int level, MainFrame frame, GameStatusPlus statusPlus, 
@@ -65,7 +67,10 @@ public class Level3State extends Level1State{
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
-		statusPlus.setLivesLeft(3);
+		GameStatus status = getGameStatus();
+		status.setLevel(3);
+		status.setAsteroidsDestroyed(600);
+		GameStatusPlus statusPlus = getGameStatusPlus();
 		statusPlus.setNewAsteroid2(false);
 		statusPlus.setNewShip(false);
 		newShip(this);
@@ -80,6 +85,7 @@ public class Level3State extends Level1State{
 		super.updateScreen();
 		drawBigAsteroid();
 		drawShip();
+		drawShipBullets();
 		checkFloorBigAsteroidCollisions();
 		checkFloorShipCollisions();
 		checkMegaManBigAsteroidCollisions();
@@ -114,16 +120,17 @@ public class Level3State extends Level1State{
 	protected void drawBigAsteroid() {
 		Graphics2D g2d = getGraphics2D();
 		GameStatusPlus statusPlus = getGameStatusPlus();
-		if((bigAsteroid.getX() + bigAsteroid.getWidth()) < this.getWidth()) {
-			bigAsteroid.translate(bigAsteroid.getSpeed(), 0);
-			getGraphicsManagerPlus().drawBigAsteroid(bigAsteroid, g2d, this);
+		if((bigAsteroid.getX() + bigAsteroid.getWidth() >  0)){
+			bigAsteroid.translate(-bigAsteroid.getSpeed(), 0);
+			getGraphicsManagerPlus().drawBigAsteroid(bigAsteroid, g2d, this);	
 		}
 		else {
 			long currentTime2 = System.currentTimeMillis();
-			if((currentTime2 - lastBigAsteroidTime) > NEW_BIG_ASTEROID_DELAY) {
+			if((currentTime2 - lastBigAsteroidTime) > NEW_ASTEROID_DELAY){
+				// draw a new asteroid
 				lastBigAsteroidTime = currentTime2;
-				statusPlus.setNewBigAsteroid(false);
-				bigAsteroid.setLocation((int) (0),
+				statusPlus.setNewAsteroid(false);
+				bigAsteroid.setLocation((int) (this.getWidth() - bigAsteroid.getPixelsWide()),
 						(rand.nextInt((int) (this.getHeight() - bigAsteroid.getPixelsTall() - 64))));
 			}
 			else {
@@ -136,7 +143,7 @@ public class Level3State extends Level1State{
 		Graphics2D g2d = getGraphics2D();
 		GameStatusPlus statusPlus = getGameStatusPlus();
 		if((ship.getX() + ship.getWidth()) > 0) {
-			ship.translate(-ship.getSpeed(), 0);
+			ship.translate(0, 0);
 			getGraphicsManagerPlus().drawShip(ship, g2d, this);
 		}
 		else {
@@ -145,7 +152,7 @@ public class Level3State extends Level1State{
 			// draw a new ship
 				lastShipTime = currentTime3;
 				statusPlus.setNewShip(false);
-				ship.setLocation((int) (this.getWidth() - ship.getPixelsWide()),
+				ship.setLocation((int) (0),
 					(rand.nextInt((int) (this.getHeight() - ship.getPixelsTall() - 25))));
 			}
 			else{
@@ -216,19 +223,15 @@ public class Level3State extends Level1State{
 	
 	protected void checkBulletBigAsteroidCollisions() {
 		GameStatusPlus statusPlus = getGameStatusPlus();
-		int hits = 0;
 		for(int i=0; i<bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
 			if(bigAsteroid.intersects(bullet)) {
-				hits++;
-				if(hits >= 3) {
 					statusPlus.setBigAsteroidsDestroyed(statusPlus.getBigAsteroidsDestroyed() + 300);
 					removeBigAsteroid(bigAsteroid);
 					levelBigAsteroidsDestroyed++;
 					damage = 0;
 					bullets.remove(i);
 					break;
-				}
 			}
 		}
 	}
@@ -294,23 +297,43 @@ public class Level3State extends Level1State{
 			this.platforms[i] = new Platform(230 , getHeight()/2 + 140 - i*40);
 		}
 		return platforms;
-
-	}
-
-	protected void clearScreen() {
-		Graphics2D g2d = getGraphics2D();
-		
-		g2d.setPaint(Color.BLACK);
-		g2d.fillRect(0, 0, getSize().width, getSize().height);
-		
-		try {
-			this.background = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/backgroundlvl3.png"));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		g2d.drawImage(background, 0, 0, null);
 	}
 	
+	protected void drawShipBullets() {
+		Graphics2D g2d = getGraphics2D();
+		long currentTime4 = System.currentTimeMillis();
+		if ((currentTime4 - lastShipBulletTime) > 1000) {
+			lastShipBulletTime = currentTime4;
+			fireShipBullet();
+		}
+		for (int i = 0; i<bigBullets.size(); i++) {
+			BigBullet bigBullet = bigBullets.get(i);
+			getGraphicsManager().drawBigBullet(bigBullet, g2d, this);
+			
+			boolean remove = this.moveShipBullet(bigBullet);
+			if(remove) {
+				bigBullets.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	public void fireShipBullet() {
+		int xPos = ship.x;
+		int yPos = ship.y + ship.width/2 - BigBullet.HEIGHT + 4;
+		BigBullet shipBullet = new BigBullet(xPos, yPos);
+		bigBullets.add(shipBullet);
+		this.getSoundManager().playBulletSound();
+	}
+	
+	public boolean moveShipBullet(BigBullet shipBullet) {
+		if (shipBullet.getY() - shipBullet.getSpeed() >= 0) {
+			shipBullet.translate(shipBullet.getSpeed(), 0);
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 }
 
